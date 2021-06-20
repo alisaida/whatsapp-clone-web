@@ -23,6 +23,12 @@
     font-size: 24px !important;
 }
 
+.sidebar__profilePicture {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+}
+
 .sidebar__search {
     display: flex;
     align-items: center;

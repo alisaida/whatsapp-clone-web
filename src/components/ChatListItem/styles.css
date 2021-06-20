@@ -18,3 +18,9 @@
 .sidebarChat__info {
     margin-left: 15px;
 }
+
+.recipient__profilePicture {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}

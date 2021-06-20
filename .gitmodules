@@ -4,3 +4,6 @@
 [submodule "gql"]
 	path = gql
 	url = https://alisaida@github.com/alisaida/whatsapp-clone-graphql.git
+[submodule "src/gql"]
+	path = src/gql
+	url = https://alisaida@github.com/alisaida/whatsapp-clone-graphql.git
