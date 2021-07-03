@@ -7,8 +7,9 @@
 .sidebar__header {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px;
     border-right: 1px solid lightgray;
+    align-items: center;
 }
 
 .sidebar__headerRight {
@@ -24,8 +25,8 @@
 }
 
 .sidebar__profilePicture {
-    height: 80px;
-    width: 80px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
 }
 

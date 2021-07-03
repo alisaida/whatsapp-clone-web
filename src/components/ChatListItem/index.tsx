@@ -1,31 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
-import { Avatar } from '@material-ui/core';
-
+// import { Avatar } from '@material-ui/core';
+import { DoneAll, PhotoCamera } from '@material-ui/icons';
 
 import { ChatRoom, User } from '../../../types'
 import { API, Auth, graphqlOperation } from 'aws-amplify';
 import { getUser } from '../../gql/graphql/queries';
 
+import moment from 'moment';
+
 export type ChatListItemProps = {
-    chatRoom: ChatRoom;
+    chatRoom: ChatRoom,
+    currentUser: User,
+    updateChatRoomId: any
 }
 
 const ChatListItem = (props: ChatListItemProps) => {
 
-    const { chatRoom } = props;
-    const [currentUserID, setCurrentUserID] = useState(null);
+    const { chatRoom, currentUser, updateChatRoomId } = props;
     const [recipientUser, setRecipientUser] = useState<User | null>(null);
+    const [isActive, setIsActive] = useState<boolean>(false);
 
     useEffect(() => {
-
-        const fetchCurrentUser = async () => {
-            const userData = await Auth.currentAuthenticatedUser();
-            setCurrentUserID(userData.attributes.sub);
-        };
-
-        fetchCurrentUser();
-
         setupRecipient();
     }, [])
 
@@ -34,7 +30,7 @@ const ChatListItem = (props: ChatListItemProps) => {
         const users: Array<any> = chatRoom.chatRoomUser;
 
         let recipientUserID: string;
-        if (users[0].userID === currentUserID) {
+        if (users[0].userID === currentUser.id) {
             recipientUserID = users[1].userID;
         } else {
             recipientUserID = users[0].userID;
@@ -58,13 +54,31 @@ const ChatListItem = (props: ChatListItemProps) => {
         }
     }
 
+    const lastMessageDisplay = () => {
+        // console.log(chatRoom.lastMessage.imageUri)
+        const isEmptyTxt: boolean = chatRoom.lastMessage.message === '';
+        const hasPhoto: boolean = chatRoom.lastMessage.imageUri != null;
+        const isSent: boolean = chatRoom.lastMessage.userID === currentUser.id;
+
+        //isRead
+        // {isSending && <DoneAll style={{ fontSize: 15, color: 'green' }} />}
+        return (
+            <div className="lastMessage__content">{isSent && <DoneAll style={{ fontSize: 15, color: 'gray' }} />}
+                {hasPhoto && <PhotoCamera style={{ fontSize: 15, color: 'gray' }} />}
+                <p>{(isEmptyTxt && hasPhoto) ? 'Photo' : chatRoom.lastMessage.message}</p>
+            </div>);
+    }
+
     return (
-        <div className="sidebarChat">
+        <div className="sidebarChat" onClick={() => { updateChatRoomId(chatRoom.id) }}>
             {/* <Avatar src="" /> */}
             {recipientUser && <img src={(recipientUser as any).imageUri} onError={(e) => ((e.target as HTMLElement).onerror = null)} alt='profile picture' className='recipient__profilePicture' />}
             <div className="sidebarChat__info">
-                <h2>{recipientUser && recipientUser.name}</h2>
-                <p>{chatRoom.lastMessage && chatRoom.lastMessage.message}</p>
+                <h4>{recipientUser && recipientUser.name}</h4>
+                <div className="sideBarChat__lastMessage">
+                    {lastMessageDisplay()}
+                    <span className="lastMessage__time">{moment(chatRoom.lastMessage.createdAt).format('LT')}</span>
+                </div>
             </div>
         </div>
     );

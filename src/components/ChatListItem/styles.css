@@ -1,18 +1,29 @@
 .sidebarChat {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     border-bottom: 1px solid #f6f6f6;
     cursor: pointer;
+    background-color: #ffffff;
+}
+
+.sidebarChatActive {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #f6f6f6;
+    cursor: pointer;
+    background-color: #ebebeb;
 }
 
 .sidebarChat:hover {
     background-color: #ebebeb;
 }
 
-.sidebarChat__info>h2 {
-    font-size: 16px;
-    margin-bottom: 8px;
+.sidebarChat__info>h4 {
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: 500;
 }
 
 .sidebarChat__info {
@@ -23,4 +34,28 @@
     height: 50px;
     width: 50px;
     border-radius: 50%;
+}
+
+.sideBarChat__lastMessage {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: grey;
+    width: 280px;
+}
+
+.lastMessage__content {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+}
+
+.lastMessage__content>p {
+    margin-top: -1px;
+}
+
+.lastMessage__time {}
+
+.lastMessage__content>.MuiSvgIcon-root {
+    margin-right: 2px;
 }

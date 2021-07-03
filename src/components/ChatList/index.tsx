@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './styles.css';
 import ChatListItem from '../ChatListItem/index'
 
@@ -6,69 +6,29 @@ import MessageIcon from '@material-ui/icons/Message';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import { Avatar, IconButton } from '@material-ui/core';
-import { SearchOutlined } from '@material-ui/icons'
+import { SearchOutlined } from '@material-ui/icons';
 
+import { ChatRoom, ChatRoomUser, User } from '../../../types';
+import { updateChatRoom } from '../../gql/graphql/mutations';
 
-import { getUser } from '../../gql/graphql/queries';
-import { getUserChatRooms } from '../../gql/graphql/custom-queries';
-import { User, ChatRoom, ChatRoomUser } from '../../../types';
+export type ChatListProps = {
+    currentUser: User,
+    chatRooms: Array<ChatRoom>,
+    updateChatRoomId: any
+}
 
-import { Auth, API, graphqlOperation } from 'aws-amplify'
+const ChatList = (props: ChatListProps) => {
 
-const ChatList = () => {
+    const { currentUser, chatRooms, updateChatRoomId } = props;
 
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [chatRooms, setChatRooms] = useState([]);
+    const sortDescending = (a: any, b: any): number => {
+        if (!a.updatedAt)
+            return -1;
+        else if (!b.updatedAt)
+            return 1;
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const currentUserData = await Auth.currentAuthenticatedUser();
-
-            const userID = currentUserData.attributes.sub;
-
-            const userData: any = await API.graphql(graphqlOperation(getUser,
-                {
-                    id: userID
-                }
-            ));
-
-            const user: User = {
-                id: userData.data.getUser.id,
-                name: userData.data.getUser.name,
-                imageUri: userData.data.getUser.imageUri,
-                status: userData.data.getUser.status,
-                username: userData.data.getUser.status
-            }
-
-            setCurrentUser(user);
-        }
-
-        fetchUser();
-    }, []);
-
-    useEffect(() => {
-        const fetchChatList = async () => {
-            const currentUserData = await Auth.currentAuthenticatedUser();
-            const userID = currentUserData.attributes.sub;
-
-            const chatRoomsData: any = await API.graphql(graphqlOperation(getUserChatRooms,
-                {
-                    id: userID
-                }
-            ));
-
-            const chatRooms = chatRoomsData.data.getUser.chatRoomUsers.items.map((item: ChatRoomUser) => ({
-                id: item.chatRoom.id,
-                lastMessage: item.chatRoom.lastMessage,
-                updatedAt: item.chatRoom.updatedAt,
-                chatRoomUser: (item.chatRoom.chatRoomUser as any).items
-            }));
-
-            setChatRooms(chatRooms)
-        }
-
-        fetchChatList();
-    }, [])
+        return a.updatedAt.localeCompare(b.updatedAt);
+    }
 
     return (
         <div className="sidebar">
@@ -96,11 +56,16 @@ const ChatList = () => {
             </div>
             {/* side bar chats */}
             <div className="sidebar__chats">
-                {/* <ChatListItem chatRooms={chatRooms} /> */}
                 {
-                    chatRooms.map(item => {
-                        return <ChatListItem chatRoom={item} key={(item as ChatRoom).id} />
-                    })
+                    chatRooms.map((item) => {
+                        return (
+                            <ChatListItem
+                                chatRoom={item} key={(item as ChatRoom).id}
+                                currentUser={currentUser}
+                                updateChatRoomId={(newChatRoomId: any) => { updateChatRoomId(newChatRoomId) }}
+                            />
+                        )
+                    })//.sort(sortDescending)
                 }
             </div>
         </div>
