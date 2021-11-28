@@ -4,7 +4,7 @@ import './styles.css';
 import { Message, User } from '../../../types';
 
 import { API, Storage, graphqlOperation } from 'aws-amplify';
-import { getUser } from '../../gql/graphql/queries';
+import { getUser } from '../../graphql/queries';
 
 import moment from 'moment';
 

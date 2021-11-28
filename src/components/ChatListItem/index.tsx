@@ -5,9 +5,9 @@ import { DoneAll, PhotoCamera } from '@material-ui/icons';
 
 import { ChatRoom, User } from '../../../types'
 import { API, Auth, graphqlOperation } from 'aws-amplify';
-import { getUser } from '../../gql/graphql/queries';
+import { getUser } from '../../graphql/queries';
 
-import moment from 'moment';
+import { timeAgo } from '../../DateUtil/DateUtil';
 
 export type ChatListItemProps = {
     chatRoom: ChatRoom,
@@ -69,15 +69,24 @@ const ChatListItem = (props: ChatListItemProps) => {
             </div>);
     }
 
+    const updateSelectedChatRoom = () => {
+        updateChatRoomId(chatRoom.id);
+        setIsActive(true);
+    }
+
+    const chatInfoClassName = isActive ? 'sidebarChat active__chat' : 'sidebarChat';
+
+    console.log(chatInfoClassName);
+
     return (
-        <div className="sidebarChat" onClick={() => { updateChatRoomId(chatRoom.id) }}>
+        <div className="sidebarChat" onClick={updateSelectedChatRoom}>
             {/* <Avatar src="" /> */}
             {recipientUser && <img src={(recipientUser as any).imageUri} onError={(e) => ((e.target as HTMLElement).onerror = null)} alt='profile picture' className='recipient__profilePicture' />}
             <div className="sidebarChat__info">
                 <h4>{recipientUser && recipientUser.name}</h4>
                 <div className="sideBarChat__lastMessage">
                     {lastMessageDisplay()}
-                    <span className="lastMessage__time">{moment(chatRoom.lastMessage.createdAt).format('LT')}</span>
+                    <span className="lastMessage__time">{timeAgo(chatRoom.lastMessage.createdAt)}</span>
                 </div>
             </div>
         </div>

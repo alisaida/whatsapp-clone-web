@@ -7,12 +7,7 @@
     background-color: #ffffff;
 }
 
-.sidebarChatActive {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #f6f6f6;
-    cursor: pointer;
+.active__chat {
     background-color: #ebebeb;
 }
 

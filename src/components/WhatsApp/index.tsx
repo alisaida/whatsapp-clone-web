@@ -3,9 +3,9 @@ import './styles.css';
 import ChatList from '../ChatList/index'
 import ChatRoomView from '../ChatRoomView/index';
 
-import { getUser } from '../../gql/graphql/queries';
-import { getUserChatRooms } from '../../gql/graphql/custom-queries';
-import { onUpdateChatRoom } from '../../gql/graphql/subscriptions';
+import { getUser } from '../../graphql/queries';
+import { getUserChatRooms } from '../../graphql/custom-queries';
+import { onUpdateChatRoom } from '../../graphql/subscriptions';
 import { User, ChatRoom, ChatRoomUser, Message } from '../../../types';
 
 import { Auth, API, graphqlOperation } from 'aws-amplify'
@@ -61,9 +61,9 @@ const WhatsApp = () => {
       })).sort(sortDescending);
 
       setChatRooms(chatRooms);
-      if (chatRooms.length > 0) {
-        setSelectedChatRoomId(chatRooms[chatRooms.length - 1].id);
-      }
+      // if (chatRooms.length > 0) {
+      //   setSelectedChatRoomId(chatRooms[chatRooms.length - 1].id);
+      // }
     }
 
     fetchChatList();
@@ -110,6 +110,7 @@ const WhatsApp = () => {
             setChatRooms([...cloneChats, updatedChatRoom]);
 
             //refresh??
+
           }
 
           return () => subscription.unsubscribe();
@@ -124,6 +125,10 @@ const WhatsApp = () => {
     return () => { };
   });
 
+  const setSelectedChatRoom = (newChatRoomId: any) => {
+    setSelectedChatRoomId(newChatRoomId);
+  }
+
   return (
     <div className="whatsapp">
       <div className="whatsapp__body">
@@ -131,7 +136,7 @@ const WhatsApp = () => {
           <ChatList
             currentUser={currentUser}
             chatRooms={chatRooms}
-            updateChatRoomId={(newChatRoomId: any) => { setSelectedChatRoomId(newChatRoomId) }}
+            updateChatRoomId={(newChatRoomId: any) => setSelectedChatRoom(newChatRoomId)}
           />
         }
         {currentUser && selectedChatRoomId && <ChatRoomView chatRoomId={selectedChatRoomId} currentUser={currentUser} key={selectedChatRoomId} />}

@@ -9,7 +9,7 @@ import { Avatar, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 
 import { ChatRoom, ChatRoomUser, User } from '../../../types';
-import { updateChatRoom } from '../../gql/graphql/mutations';
+import { updateChatRoom } from '../../graphql/mutations';
 
 export type ChatListProps = {
     currentUser: User,

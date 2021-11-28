@@ -7,9 +7,9 @@ import { Send, Mic, AttachFile, MoreVert, EmojiEmotions, Search } from '@materia
 import { ChatRoom, ChatRoomUser, User } from '../../../types';
 import MessageListItem from '../MessageListItem';
 import { API, Auth, graphqlOperation } from 'aws-amplify';
-import { getChatRoom, getUser } from '../../gql/graphql/queries';
-import { createMessage, updateChatRoom } from '../../gql/graphql/mutations';
-import { onCreateMessage } from '../../gql/graphql/subscriptions';
+import { getChatRoom, getUser } from '../../graphql/queries';
+import { createMessage, updateChatRoom } from '../../graphql/mutations';
+import { onCreateMessage } from '../../graphql/subscriptions';
 import { Message } from '../../../types';
 
 import moment from 'moment';
